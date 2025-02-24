@@ -4,6 +4,9 @@ import { onMounted, ref } from 'vue';
 import type { Schema } from '../../amplify/data/resource';
 import { generateClient } from 'aws-amplify/data';
 
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
+
 const client = generateClient<Schema>();
 
 // create a reactive reference to the array of todos
@@ -25,7 +28,11 @@ function createTodo() {
     listTodos();
   });
 }
-    
+
+function deleteTodo(id: string) {
+  client.models.Todo.delete({ id })
+}
+
 // fetch todos when the component is mounted
  onMounted(() => {
   listTodos();
@@ -35,12 +42,19 @@ function createTodo() {
 
 <template>
   <main>
+    <authenticator>
+      <template v-slot="{ signOut }">
+        <Todos />
+        <button @click="signOut">Sign Out</button>
+      </template>
+    </authenticator>
     <h1>My todos</h1>
     <button @click="createTodo">+ new</button>
     <ul>
       <li 
         v-for="todo in todos" 
-        :key="todo.id">
+        :key="todo.id"
+        @click="deleteTodo(todo.id)">
         {{ todo.content }}
       </li>
     </ul>
