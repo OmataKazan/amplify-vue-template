@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import Todos from './components/Todos.vue'
+import Tone from './components/Tone.vue'
 </script>
 
 <template>
   <main>
-    <Todos />
+    <Tone />
   </main>
 </template>
-
